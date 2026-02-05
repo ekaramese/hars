@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NonPaper YouTube Video Arama</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+                "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #f7f7f8;
+        }
+
+        .video-title {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .timecode-line {
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .timecode-line a {
+            font-family: "JetBrains Mono", "Fira Code", monospace;
+            font-size: 0.9em;
+        }
+
+        mark {
+            background: #fff3bf;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+
+        button {
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        .snippet {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .snippet a {
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .video-title {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .snippet {
+            padding: 10px 14px;
+            background: #ffffff;
+            border-left: 4px solid #2563eb;
+            margin: 10px 0;
+            border-radius: 6px;
+            line-height: 1.6;
+        }
+
+        .snippet {
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .snippet+.snippet {
+            border-top: 1px dashed #e5e7eb;
+        }
+
+        .snippet-group {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont;
+            background: #f8f9fb;
+            margin: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+            margin-bottom: 30px;
+        }
+
+        input {
+            padding: 10px;
+            width: 320px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 14px;
+            margin-left: 6px;
+            border-radius: 6px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        button.secondary {
+            background: #6b7280;
+        }
+
+        .video-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 30px;
+        }
+
+        .video-title a {
+            text-decoration: none;
+            color: #111827;
+        }
+
+        .video-title a:hover {
+            text-decoration: underline;
+        }
+
+        .timecode {
+            margin-left: 20px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        mark {
+            background: #fde047;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .video-block {
+            margin-bottom: 30px;
+        }
+
+        .video-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .timecode-block {
+            padding-left: 10px;
+        }
+
+        .timecode-line {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .timecode-line a {
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .video-block {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .video-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.09);
+        }
+
+        .video-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .video-title a:hover {
+            color: #d32f2f;
+            text-decoration: underline;
+        }
+
+        .timecode-block {
+            border-left: 3px solid #e0e0e0;
+            padding-left: 12px;
+        }
+
+        .timecode-line {
+            font-size: 0.95em;
+            color: #333;
+            padding: 4px 0;
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+
+        .timecode-line a {
+            font-family: monospace;
+            background: #f3f3f3;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        .timecode-line a:hover {
+            background: #d32f2f;
+            color: #fff;
+        }
+
+        input,
+        button {
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        button {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button.secondary {
+            background: #555;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .video-block {
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>NonPaper YouTube Video Arama</h1>
+
+    <div class="search-box">
+        <input type="text" id="query" placeholder="Kelime girin">
+        <button onclick="searchTimecodes()">Timecode İçinde Ara</button>
+        <button class="secondary" onclick="searchText()">Metinde Ara</button>
+        <button class="secondary" onclick="searchTitle()">Başlıkta Ara</button>
+        <input id="videoLookup" placeholder="YouTube URL veya video ID">
+        <button onclick="loadVideoTimecodes()">Timecode Getir</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        async function searchTitle() {
+            const q = document.getElementById("query").value.trim();
+            if (!q) return;
+
+            const res = await fetch(`/search/title?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+
+            let html = "";
+            data.forEach(v => {
+                html += `
+      <h2 class="video-title">
+        <a href="${v.url}" target="_blank">${v.title}</a>
+      </h2>
+      <div class="snippet-group">
+        <div class="snippet">
+          ${v.transcript.replace(/\n/g, "<br>")}
+        </div>
+      </div>
+    `;
+            });
+
+            document.getElementById("results").innerHTML =
+                html || "<p>Sonuç bulunamadı</p>";
+        }
+        async function searchTimecodes() {
+            const q = document.getElementById("query").value.trim();
+            if (!q) return;
+
+            const res = await fetch(`/search/timecodes?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+
+            let html = "";
+            for (const vid in data) {
+                const v = data[vid];
+                html += `
+      <h2 class="video-title">
+        <a href="${v.url}" target="_blank">${v.title}</a>
+      </h2>
+    `;
+
+                v.items.forEach(i => {
+                    html += `
+        <div class="timecode">
+          <a href="${v.url}&t=${i.seconds}s" target="_blank">
+            ${i.timecode}
+          </a>
+          – ${i.text}
+        </div>
+      `;
+                });
+            }
+
+            document.getElementById("results").innerHTML =
+                html || "<p>Sonuç bulunamadı</p>";
+        }
+
+        async function searchText() {
+            const q = document.getElementById("query").value.trim();
+            if (!q) return;
+
+            const res = await fetch(`/search/text?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+
+            let html = "";
+            Object.values(data).forEach(v => {
+                html += `
+      <h2 class="video-title">
+        <a href="${v.url}" target="_blank">${v.title}</a>
+      </h2>
+      <div class="snippet-group">
+    `;
+
+                v.snippets.forEach(s => {
+                    html += `<div class="snippet">${s}</div>`;
+                });
+
+                html += `</div>`;
+            });
+
+            document.getElementById("results").innerHTML =
+                html || "<p>Sonuç bulunamadı</p>";
+        }
+        async function loadVideoTimecodes() {
+            const q = document.getElementById("videoLookup").value.trim();
+            if (!q) return;
+
+            const res = await fetch(`/video/timecodes?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+
+            if (data.error) {
+                document.getElementById("results").innerHTML = `<p>${data.error}</p>`;
+                return;
+            }
+
+            let html = `
+    <div class="video-block">
+      <h2 class="video-title">
+        <a href="${data.url}" target="_blank">${data.title}</a>
+      </h2>
+
+      <div class="timecode-block">
+  `;
+
+            data.items.forEach(item => {
+                const link = `${data.url}&t=${item.seconds}s`;
+                html += `
+      <div class="timecode-line" title="${item.text.replace(/"/g, '&quot;')}">
+        <a href="${link}" target="_blank">${item.timecode}</a>
+        – ${item.text}
+      </div>
+    `;
+            });
+
+            html += `
+      </div>
+    </div>
+  `;
+
+            document.getElementById("results").innerHTML = html;
+        }
+    </script>
+
+</body>
+
+</html>
